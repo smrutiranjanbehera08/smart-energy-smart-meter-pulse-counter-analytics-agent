@@ -138,6 +138,7 @@ The kernel module must be built and run in Linux with matching kernel headers. T
 
 ## 👨‍💻 Author
 
-**Smrutiranjan Behera**  
+**Smrutiranjan Behera**
+  
 Wipro Capstone Project  
 *Smart Energy Smart-Meter Pulse Counter & Analytics Agent*
