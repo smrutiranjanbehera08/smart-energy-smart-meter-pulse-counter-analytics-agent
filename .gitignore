@@ -11,3 +11,4 @@ modules.order
 
 # C++ application binary
 /smart_meter_agent
+/tests/analytics_engine_test

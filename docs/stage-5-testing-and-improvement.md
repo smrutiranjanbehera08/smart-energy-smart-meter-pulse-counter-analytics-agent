@@ -71,3 +71,16 @@ Run the planned tests in Ubuntu, record their actual results, fix any issues, an
 ## ✅ Stage 5 Progress
 
 The clean build, driver availability, application menu, pulse calculations, reset, invalid-input handling, application exit, and driver unload were checked in the Ubuntu VM. The observed readings matched the configured meter constant and sample tariff.
+
+## 🧮 Analytics Unit Tests — 2 October 2026
+
+Ran `make unit-test`. All eight checks passed:
+
+- Energy calculation for 100 pulses and zero pulses
+- Handling a zero meter constant
+- Average power for a known one-hour interval
+- Handling zero elapsed time and a decreasing pulse count
+- Estimated cost for a sample tariff
+- Handling negative energy
+
+The test program is written in C++ and checks the analytics functions without loading the kernel driver.

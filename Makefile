@@ -20,4 +20,12 @@ $(APP_TARGET): $(APP_SOURCES) include/smart_meter_ioctl.h
 
 clean:
 	$(MAKE) -C $(KERNEL_BUILD) M=$(PROJECT_DIR)/driver clean
-	rm -f $(APP_TARGET)
+		rm -f $(APP_TARGET) tests/analytics_engine_test
+
+.PHONY: unit-test
+
+unit-test: tests/analytics_engine_test
+	./tests/analytics_engine_test
+
+tests/analytics_engine_test: tests/analytics_engine_test.cpp app/analytics_engine.cpp app/analytics_engine.hpp
+	$(CXX) $(CXXFLAGS) tests/analytics_engine_test.cpp app/analytics_engine.cpp -o $@
