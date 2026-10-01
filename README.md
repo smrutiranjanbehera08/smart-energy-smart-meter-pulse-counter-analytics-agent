@@ -135,3 +135,9 @@ The kernel module must be built and run in Linux with matching kernel headers. T
 - Energy and cost are estimates based on the configured meter constant and sample tariff.
 - Average power depends on the time between readings and may vary significantly for short intervals.
 - Access to `/dev/smart_meter` currently requires administrator privileges.
+
+## 👨‍💻 Author
+
+**Smrutiranjan Behera**  
+Wipro Capstone Project  
+*Smart Energy Smart-Meter Pulse Counter & Analytics Agent*
