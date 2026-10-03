@@ -1,36 +1,33 @@
 # ⚡ Smart Energy Smart-Meter Pulse Counter & Analytics Agent
 
-**🌐 Domain:** IoT, Embedded Systems & Virtual Sensors  
-**🖥️ Project Type:** Software-only Linux project  
-**👤 Project Format:** Individual project
+**🌐 Domain:** IoT, Embedded Systems & Virtual Sensors
 
-## 🔍 Project Overview
+**🖥️ Project type:** Software-only Linux capstone
 
-This project simulates a smart meter entirely in software. A virtual meter generates pulse events, and a Linux device driver passes those events to a C++ application. The application counts the pulses, estimates energy use and power, and displays useful analytics.
+**💻 Languages:** C++17 user-space application and C Linux kernel module
 
-## 🎯 Project Goal
+**👤 Project format:** Individual project
 
-To build a Linux-based software system that demonstrates virtual meter pulses, device-driver communication, C++ programming, and energy analytics.
+## 🔎 Project Overview
 
-## 🧱 Project Boundary
+This project is a software-only smart-meter prototype. The C++ application simulates meter pulses and communicates with a Linux kernel driver through `/dev/smart_meter`. The driver keeps a pulse count in memory while it is loaded. The application reads that count and calculates estimated energy, average power, and cost.
 
-This project uses software-generated meter pulses only. It does not require a physical meter, sensor, Arduino, or ESP32.
+> **Scope:** Pulse input is simulated. No physical meter, sensor, Arduino, or ESP32 is connected. Results are educational estimates and are not intended for utility billing or production use.
 
-## 💻 Programming Languages
+## ✨ Implemented Features
 
-- **C++:** Main user-space application
-- **C:** Linux kernel device driver
+- Simulate a chosen number of pulses through the C++ menu.
+- Count, read, and reset pulses through a Linux miscellaneous character driver.
+- Exchange requests between the application and driver using IOCTL operations.
+- Protect the driver's shared pulse counter with a mutex.
+- Calculate estimated energy, average power between readings, and sample cost.
+- Validate menu and pulse input, with analytics unit tests for normal and edge cases.
 
-## 🗺️ Development Stages
+### 🧠 What the project stores
 
-1. Project Introduction
-2. Requirements & Development Plan
-3. System Design & Architecture
-4. Initial Implementation & Prototype
-5. Testing, Integration & Improvement
-6. Final Implementation & Presentation
+The pulse count is held in the driver's memory while the kernel module is loaded. It is **not written to a log file or database**. Unloading the driver or restarting Linux clears the count. Persistent reading history and usage classification are possible future improvements; they are not implemented features in this version.
 
-## System Architecture
+## 🏗️ System Architecture
 
 ```mermaid
 flowchart LR
@@ -38,7 +35,7 @@ flowchart LR
     App --> Wrapper["SmartMeterDevice"]
     Wrapper -->|"open and IOCTL"| DevNode["/dev/smart_meter"]
     DevNode --> Driver["Linux Kernel Driver"]
-    Driver --> Counter[("Mutex-protected pulse counter")]
+    Driver --> Counter[("Mutex-protected pulse count in memory")]
     Counter --> Driver
     App --> Analytics["AnalyticsEngine"]
     Analytics --> Results["Energy, power, and cost estimates"]
@@ -47,7 +44,9 @@ flowchart LR
     Header -.-> Driver
 ```
 
-## UML Class Diagram
+## 📐 UML Diagrams
+
+### Class Diagram
 
 ```mermaid
 classDiagram
@@ -60,22 +59,19 @@ classDiagram
         +closeDevice() void
         +isOpen() bool
     }
-
     class AnalyticsEngine {
         +calculateEnergyKwh(uint64, double) double
         +calculateAveragePowerWatts(uint64, uint64, double, double) double
         +calculateEstimatedCost(double, double) double
     }
-
     class Main {
         +runApplication() int
     }
-
     Main --> SmartMeterDevice : communicates with driver
-    Main --> AnalyticsEngine : calculates analytics
+    Main --> AnalyticsEngine : calculates estimates
 ```
 
-## UML Sequence Diagram
+### Sequence Diagram
 
 ```mermaid
 sequenceDiagram
@@ -84,61 +80,143 @@ sequenceDiagram
     participant Device as SmartMeterDevice
     participant Driver as Linux Driver
     participant Counter as Pulse Counter
-
     User->>App: Select simulate pulses
     App->>Device: injectPulses(value)
     Device->>Driver: IOCTL inject request
-    Driver->>Counter: Add pulses
-    Counter-->>Driver: Updated count
+    Driver->>Counter: Add pulses safely
     Driver-->>Device: Request result
     User->>App: Select show analytics
     App->>Device: getPulseCount()
     Device->>Driver: IOCTL read request
-    Driver->>Counter: Read count
-    Counter-->>App: Pulse count
+    Driver-->>App: Pulse count
     App->>App: Calculate energy, power, and cost
-    App-->>User: Display analytics
+    App-->>User: Display estimates
 ```
 
-## Build and Run on Ubuntu Linux
+## 🧮 Analytics and Three-Reading Example
 
-Build the kernel module and C++ application:
+The demonstration uses **1,000 pulses per kWh** and a sample tariff of **INR 8 per kWh**.
+
+- **Energy (kWh) = cumulative pulse count ÷ pulses per kWh**
+- **Estimated cost (INR) = energy (kWh) × tariff (INR/kWh)**
+- **Average power (W) = energy change (kWh) × 3,600,000 ÷ elapsed seconds**
+
+| Reading | Pulses added since previous step | Cumulative count | Energy | Estimated cost |
+|---|---:|---:|---:|---:|
+| 1 | 100 | 100 | 100 ÷ 1,000 = **0.100 kWh** | 0.100 × 8 = **INR 0.800** |
+| 2 | 1 | 101 | 101 ÷ 1,000 = **0.101 kWh** | 0.101 × 8 = **INR 0.808** |
+| 3 | 100 | 201 | 201 ÷ 1,000 = **0.201 kWh** | 0.201 × 8 = **INR 1.608** |
+
+The first two readings match the recorded manual demonstration. Average power is omitted from this example because the program measures the actual time between readings, so that result changes from run to run.
+
+## 🚀 Build and Run (Ubuntu Linux)
+
+Run these steps **in the Ubuntu virtual machine terminal**, from the project directory. The kernel module must be built for the running Linux kernel and matching kernel headers.
+
+### 1. Open the terminal and enter the project directory
+
+```bash
+cd ~/smart-meter-project
+```
+
+### 2. Build the driver and application
 
 ```bash
 make
 ```
 
-Load the driver and start the application:
+### 3. Load the smart-meter driver
 
 ```bash
 sudo insmod driver/smart_meter_driver.ko
+```
+
+### 4. Start the application
+
+```bash
 sudo ./smart_meter_agent
 ```
 
-After exiting the application, unload the driver:
+At the menu, enter these choices and values to reproduce the three readings above:
+
+```text
+3          (reset the counter)
+1, then 100 (simulate 100 pulses)
+2          (show reading 1: 100 pulses, 0.100 kWh, INR 0.800)
+1, then 1   (add one pulse)
+2          (show reading 2: 101 pulses, 0.101 kWh, INR 0.808)
+1, then 100 (add 100 pulses)
+2          (show reading 3: 201 pulses, 0.201 kWh, INR 1.608)
+4          (exit the application)
+```
+
+For example, the first analytics result is:
+
+```text
+Pulse count: 100
+Estimated energy: 0.100 kWh
+Sample tariff: INR 8.000 per kWh
+Estimated cost: INR 0.800
+Take another reading to estimate average power.
+```
+
+The next readings also print estimated average power since the prior reading. Its value depends on the elapsed time between those readings.
+
+### 5. Unload the driver after exiting the app
 
 ```bash
 sudo rmmod smart_meter_driver
 ```
 
-Run the C++ analytics unit tests:
+### 6. Run the analytics unit tests
+
+From the project directory, run:
 
 ```bash
 make unit-test
 ```
 
-The kernel module must be built and run in Linux with matching kernel headers. This project was developed in Ubuntu inside a UTM virtual machine.
+The test program reports **“All analytics unit tests passed.”** The tests cover energy, power, and cost calculations, including selected invalid or boundary inputs. They do not load the kernel driver.
 
-## Limitations
+## ✅ Verification Summary
+
+- Kernel module and C++ application built successfully in Ubuntu Linux 24.04 ARM64 in UTM.
+- Manual checks covered pulse simulation, analytics, reset, invalid input, exit, and unloading the driver.
+- The recorded 100-pulse and 101-pulse results matched the configured meter constant and sample tariff.
+- All eight analytics unit-test checks passed.
+
+## ⚠️ Limitations
 
 - Pulse input is simulated; no physical meter or sensor is connected.
+- The pulse count exists only in driver memory while the module is loaded; it is not persistent.
 - Energy and cost are estimates based on the configured meter constant and sample tariff.
-- Average power depends on the time between readings and may vary significantly for short intervals.
-- Access to `/dev/smart_meter` currently requires administrator privileges.
+- Average power can vary substantially when readings are taken very close together.
+- Device access currently requires administrator privileges (`sudo`).
+- Usage classification and historical file/database logging are not implemented.
+
+## 🔭 Future Scope
+
+- Add configurable meter constants and tariff rates.
+- Add usage categories based on clearly documented energy thresholds.
+- Save timestamped readings to a log or database with a separate C++ storage component.
+- Produce summaries over a selected time period.
+- Explore a physical pulse input only if hardware is added in a separately defined scope.
+
+## 🗂️ Project Stages and Documentation
+
+The capstone work is documented in six stages:
+
+1. [Stage 1 – Project Introduction](docs/stage-1-project-introduction.md)
+2. [Stage 2 – Requirements and Development Plan](docs/stage-2-project-requirements.md)
+3. [Stage 3 – System Design and Architecture](docs/stage-3-system-design.md)
+4. [Stage 4 – Initial Implementation and Prototype](docs/stage-4-initial-implementation.md)
+5. [Stage 5 – Testing, Integration and Improvement](docs/stage-5-testing-and-improvement.md)
+6. [Stage 6 – Final Project Report](docs/stage-6-final-report.md)
 
 ## 👨‍💻 Author
 
 **Smrutiranjan Behera**
-  
-Wipro Capstone Project  
+
+Wipro Capstone Project
+
 *Smart Energy Smart-Meter Pulse Counter & Analytics Agent*
