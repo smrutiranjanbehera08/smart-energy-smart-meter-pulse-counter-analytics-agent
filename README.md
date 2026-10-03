@@ -168,6 +168,8 @@ The next readings also print estimated average power since the prior reading. It
 sudo rmmod smart_meter_driver
 ```
 
+This tells Linux to stop and remove the smart-meter kernel module after the application has closed the device. Its in-memory pulse count is cleared, and `/dev/smart_meter` is removed until the module is loaded again. This is normal cleanup; it does not remove your project files. The unit tests below do not use the driver, so it should stay unloaded while you run them.
+
 ### 6. Run the analytics unit tests
 
 From the project directory, run:
@@ -176,7 +178,21 @@ From the project directory, run:
 make unit-test
 ```
 
-The test program reports **“All analytics unit tests passed.”** The tests cover energy, power, and cost calculations, including selected invalid or boundary inputs. They do not load the kernel driver.
+The command compiles and runs the C++ analytics test program. Example output:
+
+```text
+PASS: 100 pulses at 1000 pulses/kWh = 0.1 kWh
+PASS: zero pulses = 0 kWh
+PASS: zero meter constant returns 0 kWh
+PASS: 10 pulses over one hour = 10 W
+PASS: zero elapsed time returns 0 W
+PASS: decreasing pulse count returns 0 W
+PASS: 0.1 kWh at INR 8/kWh = INR 0.8
+PASS: negative energy returns INR 0
+All analytics unit tests passed.
+```
+
+These tests cover energy, power, and cost calculations, including selected boundary inputs. They test the analytics functions only; they do not load or test the kernel driver.
 
 ## ✅ Verification Summary
 
