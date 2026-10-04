@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Smart Energy Smart-Meter – Capstone Presentation</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#060a1c;--bg2:#14123a;--fg:#eaf0ff;--mut:#9aa8cf;--a:#27d6ff;--b:#9b7bff;--c:#ffb524;--ok:#3ee59a;--card:rgba(255,255,255,.07);--bd:rgba(255,255,255,.16)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eef2ff;--bg2:#dfe6ff;--fg:#0e1635;--mut:#475079;--a:#0480a8;--b:#6a46e0;--c:#b36b00;--ok:#0a8f55;--card:rgba(255,255,255,.75);--bd:rgba(14,22,53,.18)}}
+:root[data-theme="dark"]{--bg:#060a1c}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:radial-gradient(1200px 700px at 20% 10%,var(--bg2),var(--bg));color:var(--fg);font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;font-size:clamp(14px,1.55vw,20px)}
+body:before{content:"";position:fixed;inset:-50% -50%;background:linear-gradient(var(--bd) 1px,transparent 1px),linear-gradient(90deg,var(--bd) 1px,transparent 1px);background-size:60px 60px;transform:perspective(600px) rotateX(70deg) translateY(30%);opacity:.35;animation:grid 8s linear infinite}
+@keyframes grid{to{background-position:0 60px}}
+#stage{position:absolute;inset:0;perspective:1500px}
+.s{position:absolute;inset:0;padding:5vh 7vw 9vh;display:flex;flex-direction:column;justify-content:center;gap:2vh;overflow-y:auto;opacity:0;pointer-events:none;transform:translateZ(-400px) rotateY(28deg);transition:opacity .7s,transform .9s cubic-bezier(.2,.8,.2,1)}
+.s.on{opacity:1;pointer-events:auto;transform:none}
+.s.p{transform:translateZ(-400px) rotateY(-28deg)}
+h1{font-size:clamp(30px,5.6vw,76px);margin:0;line-height:1.02;letter-spacing:-.02em}
+h2{font-size:clamp(24px,3.6vw,48px);margin:0;letter-spacing:-.01em}
+h2:after{content:"";display:block;width:90px;height:4px;margin-top:10px;border-radius:2px;background:linear-gradient(90deg,var(--a),var(--b),var(--c))}
+h3{margin:0 0 6px;font-size:1.1em;color:var(--a)}
+p,li{color:var(--mut);line-height:1.5;margin:4px 0}
+ul{padding-left:1.1em;margin:4px 0}
+b{color:var(--fg)}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--c);font-size:.92em}
+.g{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));perspective:900px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:16px 18px;transform-style:preserve-3d;transition:transform .2s,box-shadow .3s;box-shadow:0 18px 40px rgba(0,0,0,.25)}
+.c:hover{box-shadow:0 26px 60px rgba(39,214,255,.22)}
+.ic{font-size:2em;display:block;transform:translateZ(40px)}
+.big{font-size:clamp(26px,3.6vw,50px);font-weight:700;color:var(--c);transform:translateZ(30px);display:block}
+.chip{display:inline-block;padding:6px 14px;margin:4px 6px 0 0;border:1px solid var(--bd);border-radius:99px;background:var(--card);color:var(--fg);font-size:.85em}
+.ok{color:var(--ok)}
+.r{opacity:0}
+.s.on .r{animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(40px) rotateX(-25deg) translateZ(-80px)}to{opacity:1;transform:none}}
+.hero{display:flex;gap:5vw;align-items:center;flex-wrap:wrap}
+.cube{width:150px;height:150px;margin:60px;transform-style:preserve-3d;animation:spin 14s linear infinite}
+.cube i{position:absolute;inset:0;display:grid;place-items:center;font-size:56px;font-style:normal;border:2px solid var(--a);background:rgba(39,214,255,.1);box-shadow:inset 0 0 30px rgba(39,214,255,.4)}
+.cube i:nth-child(1){transform:translateZ(75px)}.cube i:nth-child(2){transform:rotateY(180deg) translateZ(75px)}.cube i:nth-child(3){transform:rotateY(90deg) translateZ(75px)}.cube i:nth-child(4){transform:rotateY(-90deg) translateZ(75px)}.cube i:nth-child(5){transform:rotateX(90deg) translateZ(75px)}.cube i:nth-child(6){transform:rotateX(-90deg) translateZ(75px)}
+@keyframes spin{to{transform:rotateX(360deg) rotateY(360deg)}}
+.arch{display:flex;gap:4vw;align-items:center;flex-wrap:wrap}
+.stack{position:relative;width:min(340px,70vw);height:340px;margin:40px 40px 20px;transform-style:preserve-3d;transform:rotateX(58deg) rotateZ(-32deg);animation:fl 5s ease-in-out infinite alternate}
+@keyframes fl{to{transform:rotateX(58deg) rotateZ(-22deg) translateZ(18px)}}
+.L{position:absolute;left:0;bottom:0;width:100%;height:78px;display:grid;place-items:center;text-align:center;padding:0 8px;box-sizing:border-box;border:2px solid var(--a);border-radius:10px;background:rgba(10,20,60,.82);color:#fff;font-size:.85em;font-weight:700;transform:translateZ(calc(var(--i)*62px));box-shadow:0 0 24px rgba(39,214,255,.35)}
+.L:nth-child(2n){border-color:var(--b)}.L:last-child{border-color:var(--c)}
+.flow{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+.flow .c{flex:1 1 150px;position:relative}
+.flow .c:not(:last-child):after{content:"▶";position:absolute;right:-13px;top:50%;color:var(--a);font-size:.8em;transform:translateY(-50%)}
+table{width:100%;border-collapse:collapse}td,th{padding:8px 10px;border-bottom:1px solid var(--bd);text-align:left;color:var(--mut)}th{color:var(--a)}
+.f{font-size:clamp(15px,2vw,26px);color:var(--fg);font-family:ui-monospace,Menlo,Consolas,monospace}
+#nav{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);display:flex;justify-content:center;align-items:center;gap:14px;z-index:5}
+#nav button{width:44px;height:44px;border-radius:50%;border:1px solid var(--bd);background:var(--card);color:var(--fg);font-size:18px;cursor:pointer;backdrop-filter:blur(8px)}
+#nav button:hover,#nav button:focus-visible{outline:2px solid var(--a)}
+#pg{color:var(--mut);min-width:60px;text-align:center}
+#bar{position:fixed;top:0;left:0;height:4px;background:linear-gradient(90deg,var(--a),var(--b),var(--c));width:0;transition:width .6s;z-index:6}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.r{opacity:1}}
+</style></head><body>
+<div id="bar"></div>
+<div id="stage">
+
+<section class="s"><div class="hero"><div class="cube"><i>⚡</i><i>🔌</i><i>📟</i><i>🧮</i><i>⚙️</i><i>💡</i></div><div>
+<p class="r">Wipro Capstone Project · Final Presentation</p>
+<h1 class="r">Smart Energy Smart-Meter</h1>
+<h2 class="r">Pulse Counter &amp; Analytics Agent</h2>
+<div class="r"><span class="chip">C Linux kernel driver</span><span class="chip">C++17 application</span><span class="chip">IOCTL</span><span class="chip">Software-only</span></div>
+<p class="r">Presented by <b>Smrutiranjan Behera</b> · Ubuntu 24.04 ARM64 (UTM) · 4 October 2026</p></div></div></section>
+
+<section class="s"><h2 class="r">The problem and the goal</h2><div class="g">
+<div class="c r"><span class="ic">🧩</span><h3>Problem</h3><p>Show how Linux software acquires and analyses meter events, without owning any meter hardware.</p></div>
+<div class="c r"><span class="ic">🎓</span><h3>Motivation</h3><p>Learn how a user-space app talks to a kernel driver, and practise C++ system programming with repeatable input.</p></div>
+<div class="c r"><span class="ic">🎯</span><h3>Goal</h3><p>A virtual smart meter: simulated pulses go through a Linux driver into a C++ app that shows energy, power and cost.</p></div></div>
+<p class="r">A meter constant maps pulses to energy: <b>1,000 pulses = 1 kWh</b>. Counting pulses and timing them gives consumption and power.</p></section>
+
+<section class="s"><h2 class="r">What I built</h2><div class="g">
+<div class="c r"><span class="ic">🐧</span><h3>Kernel module (C)</h3><p>Registers the virtual device <code>/dev/smart_meter</code> and keeps a 64-bit pulse counter.</p></div>
+<div class="c r"><span class="ic">🔗</span><h3>IOCTL interface</h3><p>Three commands: inject pulses, get count, reset. Shared header used by driver and app.</p></div>
+<div class="c r"><span class="ic">💻</span><h3>CLI app (C++17)</h3><p>Menu to simulate pulses, view analytics, reset and exit, with input validation.</p></div>
+<div class="c r"><span class="ic">📊</span><h3>Analytics engine</h3><p>Computes energy in kWh, average power in W and estimated cost in INR.</p></div></div></section>
+
+<section class="s"><h2 class="r">System architecture</h2><div class="arch">
+<div class="stack r"><div class="L" style="--i:0">Pulse counter (kernel memory)</div><div class="L" style="--i:1">C driver · IOCTL + mutex</div><div class="L" style="--i:2">/dev/smart_meter</div><div class="L" style="--i:3">C++ app · SmartMeterDevice + AnalyticsEngine</div><div class="L" style="--i:4">User · menu and results</div></div>
+<div class="r" style="flex:1 1 260px"><h3>Layer by layer</h3><ul><li><b>User</b> chooses a menu action.</li><li><b>C++ app</b> validates input, calls the driver, calculates results.</li><li><b>Device node</b> is the door into the kernel.</li><li><b>Driver</b> checks requests and updates the count under a mutex.</li><li><b>Counter</b> lives in kernel memory only while the module is loaded.</li></ul></div></div></section>
+
+<section class="s"><h2 class="r">Tech stack and environment</h2><div class="g">
+<div class="c r"><span class="ic">🖥️</span><h3>Platform</h3><p>Ubuntu 24.04 ARM64 in UTM on a MacBook Air M2. Kernel 7.0.0-34-generic.</p></div>
+<div class="c r"><span class="ic">🛠️</span><h3>Languages</h3><p>C for the driver, C++17 for the app. Built with <code>-Wall -Wextra -Wpedantic</code>.</p></div>
+<div class="c r"><span class="ic">📦</span><h3>Build and tools</h3><p>GNU Make, GCC/G++, kernel headers, <code>insmod</code>, <code>rmmod</code>, <code>dmesg</code>.</p></div>
+<div class="c r"><span class="ic">🌿</span><h3>Version control</h3><p>Git and GitHub, with every stage committed and documented.</p></div></div></section>
+
+<section class="s"><h2 class="r">Requirements and delivered scope</h2><div class="g">
+<div class="c r"><h3>Delivered ✔</h3><ul><li>Driver registers <code>/dev/smart_meter</code></li><li>64-bit count, mutex-protected</li><li>Inject, read and reset via IOCTL</li><li>Energy, average power and cost</li><li>Clear errors for bad input or a missing device</li><li>No external hardware</li></ul></div>
+<div class="c r"><h3>Not built (future scope)</h3><ul><li>Configurable meter constant and tariff (fixed constants today)</li><li>Usage categories and alerts</li><li>Persistent history logging</li></ul><p>The report separates early plans from what was actually verified.</p></div>
+<div class="c r"><h3>Non-functional goals</h3><ul><li>C and C++ only</li><li>Runs on Ubuntu Linux</li><li>Separate driver, header, app and docs</li><li>Simple build, load and unload commands</li></ul></div></div></section>
+
+<section class="s"><h2 class="r">Driver design: three IOCTL commands</h2>
+<table class="r"><tr><th>Command</th><th>Direction</th><th>What it does</th></tr>
+<tr><td><code>INJECT_PULSES</code></td><td>user → kernel, u32</td><td>Adds pulses. Rejects 0 (<code>-EINVAL</code>) and counter overflow (<code>-EOVERFLOW</code>).</td></tr>
+<tr><td><code>GET_COUNT</code></td><td>kernel → user, u64</td><td>Returns the cumulative pulse count.</td></tr>
+<tr><td><code>RESET_COUNT</code></td><td>no data</td><td>Sets the count to zero for a fresh demo.</td></tr></table>
+<div class="g"><div class="c r"><span class="ic">🔒</span><h3>Thread safety</h3><p>A kernel mutex guards every read and write of the shared counter.</p></div>
+<div class="c r"><span class="ic">🧷</span><h3>Safe boundaries</h3><p>Wrong magic number gives <code>-ENOTTY</code>; failed user copies give <code>-EFAULT</code>.</p></div>
+<div class="c r"><span class="ic">🚪</span><h3>Misc device</h3><p>Dynamic minor number, mode 0660, cleanly deregistered on unload.</p></div></div></section>
+
+<section class="s"><h2 class="r">Analytics formulas</h2><div class="g">
+<div class="c r"><span class="ic">⚡</span><h3>Energy</h3><p class="f">kWh = pulses / 1000</p></div>
+<div class="c r"><span class="ic">🔥</span><h3>Average power</h3><p class="f">W = Δ kWh × 3,600,000 / seconds</p></div>
+<div class="c r"><span class="ic">💰</span><h3>Estimated cost</h3><p class="f">INR = kWh × 8</p></div></div>
+<p class="r">Power uses the time between two readings, so the first reading only stores a baseline. Guards return 0 for a zero meter constant, zero elapsed time, a falling count or negative energy. Values are estimates, not billing.</p></section>
+
+<section class="s"><h2 class="r">How data flows</h2><div class="flow">
+<div class="c r"><h3>1 · Input</h3><p>User enters a pulse amount.</p></div>
+<div class="c r"><h3>2 · Open</h3><p>App opens <code>/dev/smart_meter</code>.</p></div>
+<div class="c r"><h3>3 · IOCTL</h3><p>App asks the driver to add pulses.</p></div>
+<div class="c r"><h3>4 · Update</h3><p>Driver validates and updates under a mutex.</p></div>
+<div class="c r"><h3>5 · Read</h3><p>App requests the cumulative count.</p></div>
+<div class="c r"><h3>6 · Analyse</h3><p>Engine shows kWh, W and INR.</p></div></div>
+<p class="r">The kernel driver is plain C. The C++ side wraps the device in a RAII class, <code>SmartMeterDevice</code>, so the file descriptor always closes.</p></section>
+
+<section class="s"><h2 class="r">Live demo results</h2><div class="g">
+<div class="c r"><h3>Reading 1 · simulate 100 pulses</h3><span class="big"><span data-n="100" data-d="0">100</span> pulses</span><p><b><span data-n="0.1" data-d="3">0.100</span> kWh</b> · cost <b class="ok">INR <span data-n="0.8" data-d="3">0.800</span></b></p></div>
+<div class="c r"><h3>Reading 2 · add 1 more pulse</h3><span class="big"><span data-n="101" data-d="0">101</span> pulses</span><p><b><span data-n="0.101" data-d="3">0.101</span> kWh</b> · cost <b class="ok">INR <span data-n="0.808" data-d="3">0.808</span></b></p></div></div>
+<p class="r">Recorded in the Ubuntu VM. The app also printed average power for the second reading. It varied with the gap between readings (for example 5517.960 W and 43.199 W), which is expected behaviour.</p></section>
+
+<section class="s"><h2 class="r">Testing and results</h2><div class="g">
+<div class="c r"><span class="big ok">8 / 8</span><h3>Manual integration tests</h3><p>Build, load driver, menu, 100 and 101 pulses, reset, invalid input, exit and unload. All passed on 2 Oct 2026.</p></div>
+<div class="c r"><span class="big ok">8 / 8</span><h3>Analytics unit checks</h3><p>Normal and edge cases: zero pulses, zero constant, zero time, falling count, negative energy. They run with <code>make unit-test</code> without the driver.</p></div>
+<div class="c r"><span class="ic">🛡️</span><h3>Robust input</h3><p>Menu choice 9 and a pulse value of 0 were rejected with helpful messages and the app stayed open.</p></div></div></section>
+
+<section class="s"><h2 class="r">Challenges and how I solved them</h2><div class="g">
+<div class="c r"><span class="ic">🔧</span><h3>Kernel API difference</h3><p><code>no_llseek</code> was missing in the installed headers. I removed that entry and the module compiled.</p></div>
+<div class="c r"><span class="ic">🧱</span><h3>Header guard bug</h3><p>The C++ device header lacked its opening <code>#ifndef</code>. Added it to match the <code>#define</code> and <code>#endif</code>.</p></div>
+<div class="c r"><span class="ic">📢</span><h3>Build noise</h3><p>Compiler-name, pahole and BTF messages appeared but were non-fatal, since BTF is skipped without vmlinux.</p></div></div></section>
+
+<section class="s"><h2 class="r">Limitations and future scope</h2><div class="g">
+<div class="c r"><h3>Honest limitations</h3><ul><li>Pulses are simulated; no physical meter.</li><li>Count is lost when the module unloads or Linux restarts.</li><li>Meter constant and tariff are fixed.</li><li>Needs sudo to open the root-owned device.</li></ul></div>
+<div class="c r"><h3>Next steps</h3><ul><li>Configurable meter constant and tariff</li><li>Timestamped storage and summaries</li><li>Usage thresholds and alerts</li><li>Controlled non-root device access</li></ul></div></div>
+<div class="c r" style="text-align:center"><h1 style="font-size:clamp(26px,4vw,52px)">Thank you · Questions?</h1><p>Smrutiranjan Behera · GitHub: smart-energy-smart-meter-pulse-counter-analytics-agent</p></div></section>
+
+</div>
+<div id="nav"><button id="pv" aria-label="Previous slide">◀</button><span id="pg"></span><button id="nx" aria-label="Next slide">▶</button></div>
+<script>
+const S=[...document.querySelectorAll('.s')];let i=0;
+function go(n){i=Math.max(0,Math.min(S.length-1,n));S.forEach((s,k)=>{s.classList.toggle('on',k===i);s.classList.toggle('p',k<i);if(k===i){s.scrollTop=0;s.querySelectorAll('.r').forEach((e,j)=>e.style.animationDelay=(.15+j*.12)+'s');s.querySelectorAll('[data-n]').forEach(count)}});
+document.getElementById('pg').textContent=(i+1)+' / '+S.length;document.getElementById('bar').style.width=((i+1)/S.length*100)+'%'}
+function count(e){const t=+e.dataset.n,d=+e.dataset.d,t0=performance.now();(function f(n){const p=Math.min(1,(n-t0-600)/1400);e.textContent=(t*Math.max(0,p)).toFixed(d);if(p<1)requestAnimationFrame(f)})(t0)}
+document.getElementById('pv').onclick=()=>go(i-1);document.getElementById('nx').onclick=()=>go(i+1);
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(i+1)}if(['ArrowLeft','PageUp'].includes(e.key))go(i-1);if(e.key==='Home')go(0);if(e.key==='End')go(S.length-1)});
+let x0=0;addEventListener('touchstart',e=>x0=e.touches[0].clientX);addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-x0;if(Math.abs(d)>60)go(i+(d<0?1:-1))});
+document.querySelectorAll('.c').forEach(c=>{c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect(),px=(e.clientX-r.left)/r.width-.5,py=(e.clientY-r.top)/r.height-.5;c.style.transform=`rotateY(${px*16}deg) rotateX(${-py*16}deg) translateZ(14px)`});c.addEventListener('mouseleave',()=>c.style.transform='')});
+go(0);
+</script></body></html>

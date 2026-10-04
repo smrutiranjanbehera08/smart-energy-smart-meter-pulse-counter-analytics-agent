@@ -229,6 +229,12 @@ The capstone work is documented in six stages:
 5. [Stage 5 – Testing, Integration and Improvement](docs/stage-5-testing-and-improvement.md)
 6. [Stage 6 – Final Project Report](docs/stage-6-final-report.md)
 
+## 🎞️ Interactive 3D Project Presentation
+
+Explore the project through an animated presentation covering the problem, Linux driver architecture, analytics, demonstration results, testing, and future scope.
+
+🔗 [Launch the 3D Capstone Presentation](https://smrutiranjanbehera08.github.io/smart-energy-smart-meter-pulse-counter-analytics-agent/)
+
 ## 👨‍💻 Author
 
 **Smrutiranjan Behera**
